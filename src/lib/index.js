@@ -28,7 +28,7 @@ var vuePhotoPreview ={
 			methods:{
 				$previewRefresh(){
 					setTimeout(() => {
-						this.galleryElements = document.querySelectorAll('img[preview]');
+						this.galleryElements = document.querySelectorAll('[preview]');
 						for(var i = 0, l = this.galleryElements.length; i < l; i++) {
 							this.galleryElements[i].setAttribute('data-pswp-uid', i + 1);
 							this.galleryElements[i].onclick = this.onThumbnailsClick;
@@ -48,9 +48,9 @@ var vuePhotoPreview ={
 					var thumbElements;
 					var group = eTarget.getAttribute('preview')
 					if(group) {
-						thumbElements = document.querySelectorAll('img[preview="' + group + '"]')
+						thumbElements = document.querySelectorAll('[preview="' + group + '"]')
 					} else {
-						thumbElements = document.querySelectorAll('img[preview]')
+						thumbElements = document.querySelectorAll('[preview]')
 					}
 					var clickedGallery = thumbElements;
 					
@@ -208,7 +208,12 @@ var vuePhotoPreview ={
 							item;
 							item = {}
 						for(var i = 0; i < thumbElements.length; i++) {
-							el = thumbElements[i];
+							if (thumbElements[i].src) {
+								el = thumbElements[i];
+							} else {
+								el = new Image();
+								el.src = thumbElements[i].style.backgroundImage.slice(4, -1).replace(/["']/g, "");
+							}
 
 							// include only element nodes 
 							if(el.nodeType !== 1) {
@@ -284,7 +289,7 @@ var vuePhotoPreview ={
 				}
 			},
 		    mounted: function () {
-				this.initPreview('img[preview]')
+				this.initPreview('[preview]')
 		      	
 		    }
 		})
